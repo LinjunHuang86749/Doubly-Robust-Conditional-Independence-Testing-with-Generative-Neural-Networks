@@ -1,6 +1,6 @@
 ## Reproducibility Instructions
 
-This repository contains code used to reproduce Table 2 in Section 4.3 of the manuscript.
+This repository contains code used to reproduce **Table 2** in **Section 4.3** of the manuscript.
 
   - **`practical_power_ours.ipynb`**  
     This Jupyter notebook generates the Empirical rejection rate under the alternative for method **$\hat T_2$** using the practical setting.
