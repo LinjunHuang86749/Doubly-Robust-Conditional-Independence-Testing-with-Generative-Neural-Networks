@@ -47,8 +47,3 @@ The following package versions were used (based on the Google Colab environment 
 | tqdm                     | ~4.65                |
 | scikit-learn             | 1.3.2                |
 | tensorflow_probability   | ~0.21.0              |
-
-To install the required packages:
-
-```bash
-pip install torch==2.0.1+cu118 numpy scipy tqdm scikit-learn==1.3.2 tensorflow_probability
