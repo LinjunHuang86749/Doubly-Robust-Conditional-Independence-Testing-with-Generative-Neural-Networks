@@ -1,0 +1,166 @@
+---
+title: "Sec_05_02_plot"
+output: html_document
+date: "2025-06-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+
+plt_df_ours_ae <- data.frame(dim = c(1, 3, 5, 6, 7, 8, 9, 10, 12, 13, 16, 20, 40),
+                   plow  = c( 0, 0, 0, 0.05, 0.07, 0.19, 0.25, 0.9, 1.09, 1.62, 3.95, 3.42, 5.02),
+                   pmed  = c( 0, 0, 0.02, 0.43, 1.42, 1.99, 3.59, 5.64, 7.80, 14.25, 15.52, 19.85, 18.78),
+                   phigh = c( 0, 0, 0.023, 1.80, 7.09, 17.14, 15.43, 17.12, 29.28, 31.68, 38.90, 34.01, 35.45),
+                   type = "Ours"
+                   )
+
+plt_df_shi_ae <- data.frame(dim = c(1, 3, 5, 6, 7, 8, 9, 10, 12, 13, 16, 20, 40),
+                   plow  = c( 9.25, 9.82, 13.35, 13.5, 13.15, 10.57, 15.8, 13.9, 13.25, 10.55, 14.25, 12.52, 13.8),
+                   pmed  = c( 16.15, 18.65, 24.35, 23.8, 22.7, 20.85, 24.5, 25.15, 28.45, 21.35, 28.45, 26.45, 28.7),
+                   phigh = c( 31.15, 31.4, 38.45, 42.62, 41.8, 45.15, 40.87, 47.62, 45.8, 48.45, 52.35, 44.25, 48.72),
+                   type = "DGCIT"
+                   )
+
+
+plt_df_ae_all <- rbind(plt_df_ours_ae, plt_df_shi_ae)
+
+```
+
+```{r}
+base_line_acc <- 33.61 
+
+
+plt_df_acc_ver2 <- data.frame(dim = c(1, 3, 5, 6, 7, 8, 9, 10, 12, 13, 16, 20, 40),
+                   acc  = c( 9.84, 11.01, 25.17, 28.96, 29.3, 31.45, 32.88, 33.17, 34.6, 35.15, 35.86, 35.02, 36.61),
+                   type = "Test acc 2"
+                   )
+
+plt_df_acc_psnr <- data.frame(dim = c(1, 3, 5, 6, 7, 8, 9, 10, 12, 13, 15, 16, 20, 30, 40),
+                   acc  = 10*log10(1/c( 0.06252, 0.06256, 0.05307, 0.05149, 0.05092, 0.05021, 0.04988, 0.04962, 0.04890, 0.04887, 0.04884, 0.04861, 0.04838, 0.04809, 0.04821)),
+                   type = "psnr"
+                   )
+```
+
+
+```{r}
+# Load necessary libraries
+library(ggplot2)
+```
+
+```{r}
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+```
+
+```{r}
+acc_label = "Test Accuracy"
+move_y = 5
+scale_y = 1
+input_p_val_df = plt_df_ae_all
+input_acc_df = plt_df_acc_ver2 
+
+ggplot() +
+  geom_line(linewidth=1, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_point(size=3, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type, shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='sqrt',
+                     breaks = input_p_val_df$dim,
+                     labels = input_p_val_df$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 5, linetype = 'dashed', color = 'red') +
+  geom_ribbon(data = input_p_val_df, aes(x = dim, y = pmed, col = type, ymin=plow, ymax=phigh, fill = type), alpha = 0.3)+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15)) + 
+  geom_line(linewidth=1, data = input_acc_df, aes(x = dim, y = (acc - move_y)*scale_y, col = acc_label)) +  
+  geom_point(size=3, data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, shape = acc_label)) + 
+  geom_ribbon(data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, ymin=(acc -move_y)*scale_y, ymax=(acc -move_y)*scale_y, fill = acc_label), alpha = 0.0) +
+  scale_y_continuous(
+    name = "p-value",
+    sec.axis = sec_axis(trans = (~ ./scale_y +move_y),# Adjust the secondary axis
+                        name = "accuracy",
+                        breaks = c(10, 20, 30, 40),
+                        labels = c(0.1, 0.2, 0.3, 0.4),
+                        guide = guide_axis(check.overlap = TRUE)),
+    breaks = c(0, 10, 20, 30, 40),
+    labels = c(0, 0.1, 0.2, 0.3, 0.4)
+  ) +
+  theme(
+    axis.title.y.right = element_text(angle = 90, vjust = 0.5)
+  )+
+  # geom_hline(yintercept = (base_line_acc - move_y)*scale_y, linetype = 'dashed', color = 'Black') +  # Adjust for scaling
+  # annotate("text", x = max(plt_df_acc_ae$dim) -20, y =(base_line_acc - move_y)*scale_y, label = "baseline MSE", color = "Black", vjust = -1)+ 
+  annotate("text", x = max(input_p_val_df$dim) - 13 , y = 5, label = "p-value = 0.05", color = "red", vjust = -1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))
+
+# ggsave(filename = "image_denoiseAE_01.png", dpi = 300)
+```
+
+
+```{r}
+acc_label = "Test PSNR"
+move_y = 12
+scale_y = 40
+input_p_val_df = plt_df_ae_all
+input_acc_df = plt_df_acc_psnr
+
+ggplot() +
+  geom_line(linewidth=1, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_point(size=3, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type, shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='sqrt',
+                     breaks = input_p_val_df$dim,
+                     labels = input_p_val_df$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 5, linetype = 'dashed', color = 'red') +
+  geom_ribbon(data = input_p_val_df, aes(x = dim, y = pmed, col = type, ymin=plow, ymax=phigh, fill = type), alpha = 0.3)+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15)) + 
+  geom_line(linewidth=1, data = input_acc_df, aes(x = dim, y = (acc - move_y)*scale_y, col = acc_label)) +  
+  geom_point(size=3, data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, shape = acc_label)) + 
+  geom_ribbon(data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, ymin=(acc -move_y)*scale_y, ymax=(acc -move_y)*scale_y, fill = acc_label), alpha = 0.0) +
+  scale_y_continuous(
+    name = "p-value",
+    sec.axis = sec_axis(trans = (~ ./scale_y +move_y),# Adjust the secondary axis
+                        name = "PSNR",
+                        breaks = c(12, 12.25, 12.5, 12.75, 13),
+                        labels = c(12, 12.25, 12.5, 12.75, 13),
+                        guide = guide_axis(check.overlap = TRUE)),
+    breaks = c(0, 10, 20, 30, 40),
+    labels = c(0, 0.1, 0.2, 0.3, 0.4)
+  ) +
+  theme(
+    axis.title.y.right = element_text(angle = 90, vjust = 0.5)
+  )+
+  # geom_hline(yintercept = (base_line_acc - move_y)*scale_y, linetype = 'dashed', color = 'Black') +  # Adjust for scaling
+  # annotate("text", x = max(plt_df_acc_ae$dim) -20, y =(base_line_acc - move_y)*scale_y, label = "baseline MSE", color = "Black", vjust = -1)+ 
+  annotate("text", x = max(input_p_val_df$dim) - 13 , y = 5, label = "p-value = 0.05", color = "red", vjust = -1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))
+
+# ggsave(filename = "image_denoiseAE_02.png", dpi = 300)
+
+```

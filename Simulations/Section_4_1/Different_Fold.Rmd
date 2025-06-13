@@ -1,0 +1,102 @@
+---
+title: "image_plots"
+output: html_document
+date: "2024-04-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+(mean(abs(c(0.053, 0.06, 0.052, 0.06, 0.054) - 0.05)))
+(mean(abs(c(0.044, 0.049, 0.053, 0.045, 0.047) - 0.05)))
+(mean(abs(c(0.046, 0.047, 0.04, 0.049, 0.054) - 0.05)))
+```
+
+```{r}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+```
+
+```{r}
+df_k2 <- data.frame(dim = c(200, 400, 600, 800, 1000),
+                    emp_rej = c(0.053, 0.06, 0.052, 0.06, 0.054),
+                    fold_num = "2")
+
+df_k4 <- data.frame(dim = c(200, 400, 600, 800, 1000),
+                    emp_rej = c(0.044, 0.049, 0.053, 0.045, 0.047),
+                    fold_num = "4")
+
+df_k8 <- data.frame(dim = c(200, 400, 600, 800, 1000),
+                    emp_rej = c(0.046, 0.047, 0.04, 0.049, 0.054),
+                    fold_num = "8")
+
+df <- rbind(df_k2, df_k4, df_k8)
+
+ggplot(data = df, mapping = aes(x = dim, y = emp_rej)) +
+  geom_line(aes(col = fold_num, linetype = fold_num)) +
+  geom_point(aes(col = fold_num, shape = fold_num), size=3) +
+  theme_light() +
+  labs(x = "n", y = "Empirical Rejection Rates") +
+  ylim(0, 0.2)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))+ 
+  guides(color = guide_legend(title = ""),
+         shape = guide_legend(title = "")) + 
+scale_colour_manual(name = "", values = gg_color_hue(3), 
+                     labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8]))) +
+scale_shape_discrete(name = "", 
+                      labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8])))+
+scale_linetype_discrete(name = "", labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8]))) +
+  theme(legend.key.width=unit(2,"cm")) +
+  theme(text=element_text(size=20))
+
+
+ggsave(filename = "diff_fold_01.png", dpi = 300)
+```
+
+```{r}
+df_k2 <- data.frame(dim = c(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+                    emp_rej = c(0.06, 0.102, 0.356, 0.815, 0.987, 1.0),
+                    fold_num = "2")
+
+df_k4 <- data.frame(dim = c(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+                    emp_rej = c(0.049, 0.09, 0.268, 0.651, 0.933, 0.995),
+                    fold_num = "4")
+
+df_k8 <- data.frame(dim = c(0, 0.05, 0.1, 0.15, 0.2, 0.25),
+                    emp_rej = c(0.047, 0.072, 0.19, 0.475, 0.816, 0.968),
+                    fold_num = "8")
+
+df <- rbind(df_k2, df_k4, df_k8)
+
+ggplot(data = df, mapping = aes(x = dim, y = emp_rej)) +
+  geom_line(aes(col = fold_num, linetype = fold_num)) +
+  geom_point(aes(col = fold_num, shape = fold_num), size=3) +
+  theme_light() +
+  labs(x = "p", y = "Size Adjusted Power") +
+  # ylim(0, 1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))+ 
+  guides(color = guide_legend(title = ""),
+         shape = guide_legend(title = "")) + 
+scale_colour_manual(name = "", values = gg_color_hue(3), 
+                     labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8]))) +
+scale_shape_discrete(name = "", 
+                      labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8])))+
+scale_linetype_discrete(name = "", labels = c(expression(hat(T)[2]) , expression(hat(T)[4]), expression(hat(T)[8]))) +
+  theme(legend.key.width=unit(2,"cm")) + 
+  theme(text=element_text(size=20))
+
+
+ggsave(filename = "diff_fold_02.png", dpi = 300)
+```
+
+

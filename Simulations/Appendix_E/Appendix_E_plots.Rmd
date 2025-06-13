@@ -1,0 +1,162 @@
+---
+title: "Appendix_E_plots"
+output: html_document
+date: "2025-06-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+# Compared with Sinkhorn loss.
+
+
+```{r}
+library(tidyverse)
+```
+
+```{r}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+```
+
+# null level 10%
+```{r}
+mgan_oracle <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(10.1, 10.3, 9.3, 10.6, 10.6),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(11.4, 10.6, 11.2, 10.8, 8.2),
+                   method = "ours MMD2")
+
+mgan_sinkhorn <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(13, 12.2, 13.8, 12.6, 11.8),
+                   method = "ours sinkhorn")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle,mgan_mmd2, mgan_sinkhorn) |> filter(dim != 250) ) +
+  geom_line(mapping = aes(x = dim, y = type1_error/100, col = method, linetype =  method)) +
+  geom_point(mapping = aes(x = dim, y = type1_error/100, col = method, shape = method), size=3) +
+  labs(x = expression(d[Z]), y = "Empirical Size" ) +
+  theme_light() +
+  theme(legend.position = c(1 - 0.3, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))+
+  ylim(0.05, 0.20) + 
+  scale_colour_manual(name = "", values = gg_color_hue(3), 
+                       labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) ) +
+  scale_shape_discrete(name = "", 
+                        labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) )+
+  scale_linetype_discrete(name = "", labels = c(bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ))+
+  theme(legend.key.width=unit(2,"cm"))+
+  theme(text=element_text(size=20))+
+  geom_hline(yintercept = 0.10, linetype = 'dashed', color = 'red')
+ggsave(filename = "z_comp_MMD_Sinkhorn_size_plot_level_10.png", dpi = 350 )
+```
+
+# null level 5%
+```{r}
+mgan_oracle <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(5.8, 5.2, 4.4, 5.9, 6.1),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(5.4, 5.2, 5.8, 4.6, 3.8),
+                   method = "ours MMD2")
+
+mgan_sinkhorn <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(7.8, 5.4, 7, 6.2, 6.2),
+                   method = "ours sinkhorn")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle,mgan_mmd2, mgan_sinkhorn) |> filter(dim != 250)) +
+  geom_line(mapping = aes(x = dim, y = type1_error/100, col = method, linetype = method)) +
+  geom_point(mapping = aes(x = dim, y = type1_error/100, col = method, shape = method), size=3) +
+  labs(x = expression(d[Z]), y = "Empirical Size" ) +
+  theme_light() +
+  theme(legend.position = c(1 - 0.30, 1 -0.01), legend.justification = c(0.01, 1 -0.01))+
+  ylim(2.5/100, 12/100) + 
+  scale_colour_manual(name = "", values = gg_color_hue(3), 
+                       labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) ) +
+  scale_shape_discrete(name = "", 
+                        labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) )+
+  scale_linetype_discrete(name = "", labels = c(bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ))+
+  theme(legend.key.width=unit(2,"cm")) +
+  theme(text=element_text(size=20))+
+  geom_hline(yintercept = 0.05, linetype = 'dashed', color = 'red')
+ggsave(filename = "z_comp_MMD_Sinkhorn_size_plot_level_5.png", dpi = 350 )
+```
+
+# Dim 200 power level 10%
+
+```{r}
+mgan_oracle <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(9.8, 22.6, 80.3, 99.8, 100),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(10.6, 25.6, 78.4, 100, 100),
+                   method = "ours MMD2")
+
+mgan_sinkhorn <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(10.6, 25.6, 78.4, 100, 100),
+                   method = "ours sinkhorn")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle,mgan_mmd2, mgan_sinkhorn)) +
+  geom_line(mapping = aes(x = b, y = power/100, col = method, linetype = method)) +
+  geom_point(mapping = aes(x = b, y = power/100, col = method, shape = method), size=3) +
+  labs(x = "b", y = "Size Adjusted Power" ) +
+  theme_light()+
+  scale_x_continuous(breaks = c(0.15,0.3,0.45,0.6,0.75)) + 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01)) + 
+  scale_colour_manual(name = "", values = gg_color_hue(3), 
+                       labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) ) +
+  scale_shape_discrete(name = "", 
+                        labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) )+
+  scale_linetype_discrete(name = "", labels = c(bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ))+
+  theme(legend.key.width=unit(2,"cm"))+
+  theme(text=element_text(size=20))
+ggsave(filename = "z_comp_MMD_Sinkhorn_power_plot_level_10.png", dpi = 350 )
+```
+# Dim 200 power level 5%
+
+```{r}
+
+mgan_oracle <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(5, 13.8, 68.7, 99.8, 100),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(6.2, 18.6, 72.2, 100, 100),
+                   method = "ours MMD2")
+
+mgan_sinkhorn <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(6.4, 14.8, 67.4, 100, 100),
+                   method = "ours sinkhorn")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle,mgan_mmd2, mgan_sinkhorn)) +
+  geom_line(mapping = aes(x = b, y = power/100, col = method, linetype = method)) +
+  geom_point(mapping = aes(x = b, y = power/100, col = method, shape = method), size=3) +
+  labs(x = "b", y = "Size Adjusted Power" ) +
+  theme_light()+
+  scale_x_continuous(breaks = c(0.15,0.3,0.45,0.6,0.75)) + 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01)) + 
+  scale_colour_manual(name = "", values = gg_color_hue(3), 
+                       labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) ) +
+  scale_shape_discrete(name = "", 
+                        labels = c( bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ) )+
+  scale_linetype_discrete(name = "", labels = c(bquote(hat(T)[2] ~ " GMMN"), bquote(hat(T)[2] ~ " oracle"), bquote(hat(T)[2] ~ " GANs") ))+
+    theme(legend.key.width=unit(2,"cm"))+
+    theme(text=element_text(size=20))
+ggsave(filename = "z_comp_MMD_Sinkhorn_power_plot_level_5.png", dpi = 350 )
+```

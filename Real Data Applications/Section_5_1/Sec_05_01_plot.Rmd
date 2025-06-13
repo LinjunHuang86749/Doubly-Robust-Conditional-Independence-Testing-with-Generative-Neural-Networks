@@ -1,0 +1,267 @@
+---
+title: "Sec_05_01_plot"
+output: html_document
+date: "2025-06-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+plt_df_ours_ae <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   plow  = c( 0, 0.002, 0.008, 0.00725, 0.0145, 0.0295, 0.04975, 0.04575, 0.0665, 0.07175, 0.0505, 0.15875, 0.09225, 0.12875, 0.10575),
+                   pmed  = c( 0, 0.008, 0.0225, 0.042, 0.04, 0.075, 0.103, 0.111, 0.1045, 0.1865, 0.1935, 0.2615, 0.1795, 0.279, 0.4065),
+                   phigh = c( 0, 0.02925, 0.0535, 0.0895, 0.061, 0.14575, 0.4265, 0.3445, 0.30125, 0.45875, 0.48375, 0.45925, 0.502, 0.64625, 0.7755),
+                   type = "Ours Autoencoder"
+                   )
+
+
+plt_df_ours_pca <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   plow = c(0, 0, 0, 0, 0, 0, 0, 0.00175, 0.00975, 0.028, 0.0595, 0.04675, 0.0395, 0.1475, 0.139),
+                   pmed = c(0, 0, 0, 0, 0, 0, 0, 0.009, 0.02, 0.0615, 0.088, 0.1125,  0.1205, 0.321, 0.2965),
+                   phigh = c(0, 0, 0, 0, 0, 0, 0.00025, 0.021, 0.10075, 0.15225, 0.21975, 0.23575, 0.33675, 0.64325, 0.6315),
+                   type = "Ours PCA"
+                   )
+
+plt_df_ours_ap <- data.frame(dim = c( 9, 16, 25, 36, 49, 64, 81, 100),
+                   plow = c(0, 0, 0.001, 0.00475, 0.026, 0.037, 0.08325, 0.106),
+                   pmed = c(0, 0, 0.003, 0.0139, 0.0545, 0.0885, 0.16949, 0.1845),
+                   phigh = c(0, 0, 0.01425, 0.03225, 0.14825, 0.2445, 0.394, 0.439),
+                   type = "Ours Average Pooling"
+                   )
+
+plt_df_shi_ae <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   plow  = c( 0.01, 0.19375, 0.26975, 0.23175, 0.281, 0.327, 0.311, 0.3935, 0.281, 0.35325, 0.33125, 0.38725, 0.37075, 0.3215, 0.3575),
+                   pmed  = c( 0.0085, 0.303, 0.368, 0.319, 0.3845, 0.38, 0.43, 0.4745, 0.3845, 0.4405, 0.4375, 0.5015, 0.4445, 0.454, 0.488),
+                   phigh = c( 0.019, 0.41675, 0.52575, 0.426, 0.48725, 0.4985, 0.5165, 0.516, 0.48725, 0.5105, 0.51075, 0.54425, 0.5185, 0.5345, 0.58075),
+                   type = "DGCIT Autoencoder"
+                   )
+
+plt_df_shi_pca <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   plow = c( 0, 0, 0, 0.001, 0.00375, 0.05525, 0.07825, 0.218, 0.214, 0.31025, 0.31225, 0.329, 0.292, 0.33825, 0.29775),
+                   pmed = c( 0, 0, 0, 0.005, 0.0185, 0.1465, 0.1355, 0.3345, 0.359, 0.3825, 0.418, 0.388, 0.432, 0.463, 0.407),
+                   phigh = c( 0, 0, 0.001, 0.0225, 0.0605, 0.254, 0.20425, 0.439, 0.45125, 0.55375, 0.575, 0.5385, 0.532, 0.55075, 0.518),
+                   type = "DGCIT PCA"
+                   )
+
+plt_df_shi_ap <- data.frame(dim = c( 9, 16, 25, 36, 49, 64, 81, 100),
+                   plow  = c( 0, 0.00375, 0.18725, 0.195, 0.32675, 0.318, 0.383, 0.32125),
+                   pmed  = c( 0, 0.0235, 0.2815, 0.347, 0.4425, 0.394, 0.4535, 0.4355),
+                   phigh = c( 0, 0.057, 0.38475, 0.47375, 0.55825, 0.506, 0.55275, 0.56825),
+                   type = "DGCIT Average Pooling"
+                   )
+
+plt_df_all <- rbind(plt_df_ours_ae, plt_df_ours_pca, plt_df_ours_ap)
+plt_df_ae_all <- rbind(plt_df_ours_ae, plt_df_shi_ae)
+plt_df_pca_all <- rbind(plt_df_ours_pca, plt_df_shi_pca)
+plt_df_ap_all <- rbind(plt_df_ours_ap, plt_df_shi_ap)
+```
+
+```{r}
+base_line_acc <- 0.962
+
+plt_df_acc_ae <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   acc  = c(0.7768, 0.8843, 0.9229, 0.923, 0.9335, 0.9434, 0.9607, 0.9642, 0.9684, 0.9709, 0.9719, 0.9774, 0.9815, 0.9797, 0.9665),
+                   type = "Accuracy Autoencoder"
+                   )
+
+plt_df_acc_pca <- data.frame(dim = c(3, 4, 5, 6, 7, 8, 10, 12, 15, 16, 17, 20, 30, 40, 100),
+                   acc  = c(0.4057, 0.5735, 0.7042, 0.7954, 0.8459, 0.8805, 0.9122, 0.9322, 0.9496, 0.9546, 0.9557, 0.9631, 0.9686, 0.9691, 0.9671),
+                   type = "Accuracy PCA"
+                   )
+
+plt_df_acc_ap <- data.frame(dim = c( 9, 16, 25, 36, 49, 64, 81, 100),
+                   acc  = c(0.6937, 0.7875, 0.897, 0.924, 0.9435, 0.9505, 0.9621, 0.9669),
+                   type = "Accuracy Average pooling"
+                   )
+```
+
+
+```{r}
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+ggplot(data = plt_df_all, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_line(linewidth=1) +
+  geom_point(size=3, aes(shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='log',
+                     breaks = plt_df_all$dim,
+                     labels = plt_df_all$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 0.05, linetype = 'dashed', color = 'red') +
+  geom_ribbon(aes(ymin=plow, ymax=phigh, x=dim, fill = type), alpha = 0.3)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17, 15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15))
+
+# ggsave(filename = "image_07.png", dpi = 300)
+```
+
+
+```{r}
+acc_label = "Test Accuracy"
+move_y = 0.7
+scale_y = 2
+input_p_val_df = plt_df_ae_all
+input_acc_df = plt_df_acc_ae
+
+ggplot() +
+  geom_line(linewidth=1, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_point(size=3, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type, shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='log',
+                     breaks = input_p_val_df$dim,
+                     labels = input_p_val_df$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 0.05, linetype = 'dashed', color = 'red') +
+  geom_ribbon(data = input_p_val_df, aes(x = dim, y = pmed, col = type, ymin=plow, ymax=phigh, fill = type), alpha = 0.3)+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15)) + 
+  geom_line(linewidth=1, data = input_acc_df, aes(x = dim, y = (acc - move_y)*scale_y, col = acc_label)) +  
+  geom_point(size=3, data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, shape = acc_label)) + 
+  geom_ribbon(data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, ymin=(acc -move_y)*scale_y, ymax=(acc -move_y)*scale_y, fill = acc_label), alpha = 0.0) +
+  scale_y_continuous(
+    name = "p-value",
+    sec.axis = sec_axis(trans = (~ ./scale_y +move_y),# Adjust the secondary axis
+                        name = "accuracy",
+                        breaks = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0),
+                        labels = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, "1.0"),
+                        guide = guide_axis(check.overlap = TRUE))  
+  ) +
+  theme(
+    axis.title.y.right = element_text(angle = 90, vjust = 0.5)
+  )+
+  geom_hline(yintercept = (base_line_acc - move_y)*scale_y, linetype = 'dashed', color = 'Black') +  # Adjust for scaling
+  annotate("text", x = max(plt_df_acc_ae$dim) -20, y =(base_line_acc - move_y)*scale_y, label = "baseline accuracy", color = "Black", vjust = -1)+ 
+  annotate("text", x = max(plt_df_acc_ae$dim) - 13 , y = 0.05, label = "p-value = 0.05", color = "red", vjust = -1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))
+
+# ggsave(filename = "image_11_2.png", dpi = 300)
+```
+
+```{r}
+acc_label = "Test Accuracy"
+move_y = 0.35
+scale_y = 0.8
+input_p_val_df = plt_df_pca_all
+input_acc_df = plt_df_acc_pca
+
+ggplot() +
+  geom_line(linewidth=1, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_point(size=3, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type, shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='log',
+                     breaks = input_p_val_df$dim,
+                     labels = input_p_val_df$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 0.05, linetype = 'dashed', color = 'red') +
+  geom_ribbon(data = input_p_val_df, aes(x = dim, y = pmed, col = type, ymin=plow, ymax=phigh, fill = type), alpha = 0.3)+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15)) + 
+  geom_line(linewidth=1, data = input_acc_df, aes(x = dim, y = (acc - move_y)*scale_y, col = acc_label)) +  
+  geom_point(size=3, data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, shape = acc_label)) + 
+  geom_ribbon(data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, ymin=(acc -move_y)*scale_y, ymax=(acc -move_y)*scale_y, fill = acc_label), alpha = 0.0) +
+  scale_y_continuous(
+    name = "p-value",
+    sec.axis = sec_axis(trans = (~ ./scale_y +move_y),# Adjust the secondary axis
+                        name = "accuracy",
+                        breaks = c(0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0),
+                        labels = c(0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, "1.0"),
+                        guide = guide_axis(check.overlap = TRUE)),
+    breaks = c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5),
+    labels = c("0", " ", 0.1, " ", 0.2, " ", 0.3, " ", 0.4, " ", 0.5),
+  ) +
+  theme(
+    axis.title.y.right = element_text(angle = 90, vjust = 0.5)
+  )+
+  geom_hline(yintercept = (base_line_acc - move_y)*scale_y, linetype = 'dashed', color = 'Black') +  # Adjust for scaling
+  annotate("text", x = max(plt_df_acc_ae$dim) -20, y =(base_line_acc - move_y)*scale_y, label = "baseline accuracy", color = "Black", vjust = -1)+ 
+  annotate("text", x = max(plt_df_acc_ae$dim) - 13 , y = 0.05, label = "p-value = 0.05", color = "red", vjust = -1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))
+
+# ggsave(filename = "image_12_2.png", dpi = 300)
+```
+
+```{r}
+acc_label = "Test Accuracy"
+move_y = 0.7
+scale_y = 1.8
+input_p_val_df = plt_df_ap_all
+input_acc_df = plt_df_acc_ap
+
+ggplot() +
+  geom_line(linewidth=1, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type)) +
+  geom_point(size=3, data = input_p_val_df, mapping = aes(x = dim, y = pmed, col = type, shape = type)) +
+  theme_light() +
+  labs(x = quote(d[l]), y = "p-value") +
+  scale_x_continuous(trans='log',
+                     breaks = input_p_val_df$dim,
+                     labels = input_p_val_df$dim,
+                     guide = guide_axis(check.overlap = TRUE)) +
+  # ylim(0, 0.5) +
+  geom_hline(yintercept = 0.05, linetype = 'dashed', color = 'red') +
+  geom_ribbon(data = input_p_val_df, aes(x = dim, y = pmed, col = type, ymin=plow, ymax=phigh, fill = type), alpha = 0.3)+
+  # theme(axis.text=element_text(size=10))+
+  theme(text=element_text(size=15)) + 
+  geom_line(linewidth=1, data = input_acc_df, aes(x = dim, y = (acc - move_y)*scale_y, col = acc_label)) +  
+  geom_point(size=3, data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, shape = acc_label)) + 
+  geom_ribbon(data = input_acc_df, aes(x = dim, y = (acc -move_y)*scale_y, col = acc_label, ymin=(acc -move_y)*scale_y, ymax=(acc -move_y)*scale_y, fill = acc_label), alpha = 0.0) +
+  scale_y_continuous(
+    name = "p-value",
+    sec.axis = sec_axis(trans = (~ ./scale_y +move_y),# Adjust the secondary axis
+                        name = "accuracy",
+                        breaks = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 1.0),
+                        labels = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, "1.0"),
+                        guide = guide_axis(check.overlap = TRUE)),
+    breaks = c(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5),
+    labels = c("0", " ", 0.1, " ", 0.2, " ", 0.3, " ", 0.4, " ", 0.5),
+  ) +
+  theme(
+    axis.title.y.right = element_text(angle = 90, vjust = 0.5)
+  )+
+  geom_hline(yintercept = (base_line_acc - move_y)*scale_y, linetype = 'dashed', color = 'Black') +  # Adjust for scaling
+  annotate("text", x = max(plt_df_acc_ae$dim) -20, y =(base_line_acc - move_y)*scale_y, label = "baseline accuracy", color = "Black", vjust = -1)+ 
+  annotate("text", x = max(plt_df_acc_ae$dim) - 13 , y = 0.05, label = "p-value = 0.05", color = "red", vjust = -1)+ 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01))  + 
+  scale_colour_manual(name = "", values = gg_color_hue(3) ) +
+  scale_shape_manual(name = "", values = c(15, 16, 17)) + 
+  guides(fill=guide_legend(title=""))+
+  theme(legend.key.width=unit(1,"cm"))
+
+# ggsave(filename = "image_13_2.png", dpi = 300)
+```
+
+
+
+
+
