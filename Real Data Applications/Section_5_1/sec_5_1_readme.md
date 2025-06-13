@@ -12,7 +12,7 @@ This repository contains code used to reproduce **Figure 3** in **Section 5.1** 
 
   - **`image_Application_PCA` folder**
   
-    This folder includes folders that used to compute p-values for Figure 3 (a) and (c), using **PCA** as the feature extraction method.
+    This folder includes folders that used to compute p-values for **Figure 3 (a) and (c)**, using **PCA** as the feature extraction method.
     
     - **`train_labels_PCA`** folder: Contain `.ipynb` files to learn generators of $P_{Y |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
     - **`train_images_PCA`** folder: Contain `.ipynb` files to learn generators of $P_{X |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
@@ -24,7 +24,7 @@ This repository contains code used to reproduce **Figure 3** in **Section 5.1** 
 
   - **`image_Application_Avg_Pooling` folder** 
   
-    This folder includes folders that used to compute p-values for Figure 3 (a) and (d), using **Average Pooling** as the feature extraction method.
+    This folder includes folders that used to compute p-values for **Figure 3 (a) and (d)**, using **Average Pooling** as the feature extraction method.
     
     - **`train_labels_Avg_Pooling`** folder: Contain `.ipynb` files to learn generators of $P_{Y |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
     - **`train_images_Avg_Pooling`** folder: Contain `.ipynb` files to learn generators of $P_{X |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
@@ -36,7 +36,7 @@ This repository contains code used to reproduce **Figure 3** in **Section 5.1** 
 
   - **`image_Application_AE` folder** 
   
-    This folder includes folders that used to compute p-values for Figure 3 (a) and (b), using **AE** as the feature extraction method.
+    This folder includes folders that used to compute p-values for **Figure 3 (a) and (b)**, using **AE** as the feature extraction method.
     
     - **`train_labels_AE`** folder: Contain `.ipynb` files and used the trained AE models to learn generators of $P_{Y |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
     - **`train_images_AE`** folder: Contain `.ipynb` files and used the trained AE models to learn generators of $P_{X |f_{d_{l}(X)}}$ across various latent space dimensions $d_l$.
@@ -50,17 +50,17 @@ This repository contains code used to reproduce **Figure 3** in **Section 5.1** 
   - **`accuracy` folder** 
   
     This folder includes `.ipynb` files that used to compute the test accuracies
-of a k-NN classifiers that shown in Figure 3 (a), (b), (c), and (d), using **PCA**, **Average Pooling**, and **AE** as the feature extraction method respectively.
+of a k-NN classifiers that shown in **Figure 3 (a), (b), (c), and (d)**, using **PCA**, **Average Pooling**, and **AE** as the feature extraction method respectively.
     
 ***
 
   - **`Sec_05_01_plot.Rmd`**  
   
-    This R Markdown file contained the generated data from the previous `.ipynb` file in different folders to create the final visualizations for Figure 3 (a), (b), (c), and (d).  
-    - Lines 88–116: Code for generating Figure 3 (a). 
-    - Lines 119–164: Code for generating Figure 3 (b).
-    - Lines 166–213: Code for generating Figure 3 (c). 
-    - Lines 215–262: Code for generating Figure 3 (d).
+    This R Markdown file contained the generated data from the previous `.ipynb` file in different folders to create the final visualizations for **Figure 3 (a), (b), (c), and (d)**.  
+    - Lines 88–116: Code for generating **Figure 3 (a)**. 
+    - Lines 119–164: Code for generating **Figure 3 (b)**.
+    - Lines 166–213: Code for generating **Figure 3 (c)**. 
+    - Lines 215–262: Code for generating **Figure 3 (d)**.
 
 ***
  
