@@ -1,14 +1,14 @@
 ## Reproducibility Instructions
 
-This repository contains code used to reproduce Figure 6 in Appendix C of the manuscript.
+This repository contains code used to reproduce **Figure 6** in **Appendix C** of the manuscript.
 
   - **`ours_size.ipynb`**  
-    This Jupyter notebook generates the emperical size used in Figure 6 (a) for method **$\hat T_2$**. 
-    - To generate empirical size for Figure 6 (a) for method **$\hat T_2$**, please run the Code Block titled `code to get Emperical Rejection Rate for Figure 6 (a) hat T_2`.
+    This Jupyter notebook generates the emperical size used in **Figure 6 (a)** for method **$\hat T_2$**. 
+    - To generate empirical size for **Figure 6 (a)** for method **$\hat T_2$**, please run the Code Block titled `code to get Emperical Rejection Rate for Figure 6 (a) hat T_2`.
 
   - **`ours_power.ipynb`**  
-    This Jupyter notebook generates the size adjusted power used in Figure 6 (b) for method **$\hat T_2$**. 
-    - To generate size adjusted power for Figure 6 (a) for method **$\hat T_2$**, please run the Code Block titled `code to get Size Adjusted Power for Figure 6 (b) hat T_2`.
+    This Jupyter notebook generates the size adjusted power used in **Figure 6 (b)** for method **$\hat T_2$**. 
+    - To generate size adjusted power for **Figure 6 (a)** for method **$\hat T_2$**, please run the Code Block titled `code to get Size Adjusted Power for Figure 6 (b) hat T_2`.
 
   - **`SplitKCI`** Folder
     This folder contains all the code that generates the p values for method **SplitKCI** with different split ratio. 
