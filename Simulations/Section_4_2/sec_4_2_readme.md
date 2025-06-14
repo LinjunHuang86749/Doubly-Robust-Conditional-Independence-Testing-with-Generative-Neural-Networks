@@ -33,7 +33,7 @@ This repository contains code used to reproduce **Figure 2** in **Section 4.2** 
     - Code before line 251: generate the statistic for different dimension dz of $Z$, different signal value b and different batach (dt) of experiment.
     - Code after line 251: Use the statistics generated above to calculate the empirical rejection rate under alternative used in **Figure 2 (b)**.
     
-  - **`sec_04_02_plots.Rmd`**  
+  - **`sec_4_2_plots.Rmd`**  
     This R Markdown file uses the generated data from the previous `.ipynb` files to create the final visualizations for Figure 2 (a) and (b).  
     - Lines 26–64: Code for generating **Figure 2 (a)** 
     - Lines 70–108: Code for generating **Figure 2 (b)**
