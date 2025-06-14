@@ -1,0 +1,109 @@
+---
+title: "sec_04_02_plots"
+output: html_document
+date: "2025-06-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+library(tidyverse)
+```
+```{r}
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+```
+
+
+
+# null level 5%
+```{r}
+mgan_oracle <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(5.8, 5.2, 4.4, 5.9, 6.1),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(5.4, 5.2, 5.8, 4.6, 3.8),
+                   method = "ours MMD2")
+
+dcgit <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(8.00, 6.8, 7.2, 6, 3.6),
+                   method = "DGCIT")
+
+gcit <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(3.8, 5, 3.6, 5.3, 6.6),
+                   method = "GCIT")
+
+cit <- data.frame(dim = c(50,100,150,200,250),
+                   type1_error = c(4.2, 5, 5.2, 5, 5.2),
+                   method = "CIT")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle, mgan_mmd2, dcgit, gcit, cit)) +
+  geom_line(mapping = aes(x = dim, y = type1_error/100, col = method, linetype = method)) +
+  geom_point(mapping = aes(x = dim, y = type1_error/100, col = method, shape = method), size=3) +
+  labs(x = expression(d[Z]), y = "Empirical Size" ) +
+  theme_light() +
+  theme(legend.position = c(1 - 0.30, 1 -0.01), legend.justification = c(0.01, 1 -0.01))+
+  ylim(2.5/100, 12/100) + 
+scale_colour_manual(name = "", values = gg_color_hue(5), 
+                     labels = c("CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") )) +
+scale_shape_discrete(name = "", 
+                      labels = c( "CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") ))+
+scale_linetype_discrete(name = "", labels = c( "CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") ))+
+  theme(legend.key.width=unit(2,"cm")) +
+  theme(text=element_text(size=20))
+ggsave(filename = "z_null3_plot_level_5.png", dpi = 350 )
+```
+
+
+
+# Dim 200 size adjusted power level 5%
+
+```{r}
+
+mgan_oracle <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(5.0, 13.8, 68.7, 99.8, 100),
+                   method = "ours Oracle")
+
+mgan_mmd2 <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(6.2, 18.6, 72.2, 100, 100),
+                   method = "ours MMD2")
+
+dcgit <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(5.2, 8.8, 35.8, 76.2, 95.6),
+                   method = "DGCIT")
+
+gcit <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(4.8, 8.2, 37.4, 87.4, 99.8),
+                   method = "GCIT")
+
+cit  <- data.frame(b = c(0.15,0.3,0.45,0.6,0.75),
+                   power = c(4.4, 5.4, 6.8, 6.6, 8.4),
+                   method = "CIT")
+```
+
+```{r}
+ggplot(data = rbind(mgan_oracle,mgan_mmd2, dcgit, gcit, cit)) +
+  geom_line(mapping = aes(x = b, y = power/100, col = method, linetype = method)) +
+  geom_point(mapping = aes(x = b, y = power/100, col = method, shape = method), size=3) +
+  labs(x = "b", y = "Size Adjusted Power" ) +
+  theme_light()+
+  scale_x_continuous(breaks = c(0.15,0.3,0.45,0.6,0.75)) + 
+  theme(legend.position = c(0.01, 1 - 0.01), legend.justification = c(0.01, 1 - 0.01)) + 
+scale_colour_manual(name = "", values = gg_color_hue(5), 
+                     labels = c("CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") )) +
+scale_shape_discrete(name = "", 
+                      labels = c( "CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") ))+
+scale_linetype_discrete(name = "", labels = c( "CIT", "DGCIT", "GCIT", expression(hat(T)[2]), bquote(hat(T)[2] ~ " oracle") ))+
+  theme(legend.key.width=unit(2,"cm"))+
+  theme(text=element_text(size=20))
+ggsave(filename = "z_adj_power3_plot_level_5.png", dpi = 350 )
+```
