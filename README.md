@@ -36,7 +36,7 @@ Place these datasets in the appropriate locations as described in the relevant `
 
 ## Environment and Dependencies
 
-The following package versions were used (based on the Google Colab environment as of January 2024):
+The following package versions were used:
 
 | Package                  | Version              |
 |--------------------------|----------------------|
