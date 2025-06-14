@@ -54,7 +54,7 @@ of a k-NN classifiers that shown in **Figure 3 (a), (b), (c), and (d)**, using *
     
 ***
 
-  - **`Sec_05_01_plot.Rmd`**  
+  - **`Sec_5_1_plot.Rmd`**  
   
     This R Markdown file contained the generated data from the previous `.ipynb` file in different folders to create the final visualizations for **Figure 3 (a), (b), (c), and (d)**.  
     - Lines 88–116: Code for generating **Figure 3 (a)**. 
