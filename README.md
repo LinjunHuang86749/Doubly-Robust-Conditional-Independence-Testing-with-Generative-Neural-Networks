@@ -36,6 +36,8 @@ Place these datasets in the appropriate locations as described in the relevant `
 
 ## Environment and Dependencies
 
+### Python Environment
+
 The following package versions were used:
 
 | Package                  | Version              |
@@ -47,3 +49,10 @@ The following package versions were used:
 | tqdm                     | ~4.65                |
 | scikit-learn             | 1.3.2                |
 | tensorflow_probability   | ~0.21.0              |
+
+### R Environment
+
+The following R version was used for all R Markdown (`.Rmd`) or R script files:
+
+- R version 4.3.3 (2024-02-29 ucrt)
+
