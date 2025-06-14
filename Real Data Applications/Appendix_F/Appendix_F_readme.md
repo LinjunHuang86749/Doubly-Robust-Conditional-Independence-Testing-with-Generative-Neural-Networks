@@ -13,7 +13,7 @@ To access the CCLE dataset, please visit the [GCIT repository](https://github.co
 ---
 
 - **`Ours.ipynb`**  
-  This notebook computes the **\( \hat{T}_2 \)** p-values reported in **Table 3**.  
+  This notebook computes the **$\hat{T}_2$** p-values reported in **Table 3**.  
   - The final code block prints the p-values for different drug–gene pairs.
 
 - The other p-values shown in **Table 3** are reproduced from:  
