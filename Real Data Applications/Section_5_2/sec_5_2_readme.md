@@ -39,7 +39,7 @@ Please refer to the **`MNIST/`** folder from **Section 5.1** to access the `.pt`
     
 ***
 
-  - **`Sec_05_02_plot.Rmd`**  
+  - **`Sec_5_2_plot.Rmd`**  
   
     This R Markdown file contained the data from the previous `.ipynb` file in different folders to create the final visualizations for **Figure 4 (a) and (b)**.  
     - Lines 72–119: Code for generating **Figure 4 (a)**. 
